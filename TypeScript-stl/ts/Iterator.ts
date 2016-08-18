@@ -58,7 +58,7 @@ namespace std {
          * operator++     next
          *
          * Get iterator to next element.
-         * 다음 요소에 대한 반복자를 가져온다.
+         * 이전 요소에 대한 반복자를 가져온다.
          * If current iterator is last item,
          * 현재 반복자가 마지막 항목인 경우
          * returns {@link IContainer.end IContainer.end()}.
@@ -164,6 +164,216 @@ namespace std {
         public abstract swap(obj: Iterator<T>): void;
 
     }
+
+}
+
+namespace std {
+    /**
+     * this class reverse the direction in which a bidirectional or random-access iterator iterates through a range.
+     * 이 클래스는 범위를 통해 양방향 또는 랜덤 엑세스 반복자의 방향을 바꾼다.
+     *
+     * A copy of the original iterator(the {@link Iterator base iterator}) is kept internally and used to reflect the operations performed on the {@link ReverseIterator} :
+     * 오리지널 반복자의 복사본은 내부적으로 유지하고 operation을 수행할 때 쓰인다.
+     */
+
+    export abstract class ReverseIterator<T, Base extends Iterator<T>, This extends ReverseIterator<T, Base, This>> extends Iterator<T> {
+        /**
+         * hidden
+         */
+        protected _base: Base;
+
+        /* ---------------------------------------------------------
+         CONSTRUCTORS
+         --------------------------------------------------------- */
+        /**
+         * Construct from base iterator.
+         *
+         * @param base A reference of the base iterator, which iterates in the opposite direction.
+         */
+        public constructor(base: Base) {
+             if( base == null )
+             {
+                 super(null);
+             }
+             else
+             {
+                 super(base.get_source());
+                 this._base = base.prev() as Base;
+             }
+        }
+
+        /**
+         * Return base iterator.
+         *
+         * The base iterator is an iterator of the same type as the on use to construct the ReverseIterator,
+         * but pointing to the element next to the one the {@link ReverseIterator} is currently pointing to
+         * (a {@link ReverseIterator} has always an offset of -1 with respect to its base iterator).
+         */
+        public base(): Base {
+            return this._base.next() as Base;
+        }
+
+        /**
+         * CREATE A NEW OBJECT WITH SAME (DERIVED) TYPE
+         */
+        protected abstract create_neighbor(): This;
+
+        /* ---------------------------------------------------------
+         ACCESSORS
+         --------------------------------------------------------- */
+        /**
+         * <p> Get value of the iterator is pointing. </p>
+         *
+         * @return A value of the reverse iterator.
+         */
+        public get value(): T {
+            return this._base.value;
+        }
+
+
+        /* ---------------------------------------------------------
+         MOVERS
+         --------------------------------------------------------- */
+        /**
+         * @inheritdoc
+         */
+        public prev(): This {
+            let ret = this.create_neighbor();
+            ret._base = this._base.next() as Base;
+
+            return ret;
+        }
+
+        public next(): This {
+            let ret = this.create_neighbor();
+            ret._source = this._source;
+            ret._base = this._base.next() as Base;
+
+            return ret;
+        }
+
+        public advance(n: number): This {
+            let ret = this.create_neighbor();
+            ret._source = this._source;
+            ret._base = this._base.advance(-n) as Base;
+
+            return ret;
+        }
+
+        /* ---------------------------------------------------------
+         COMPARES
+         --------------------------------------------------------- */
+        public equal_to(obj: This): boolean {
+            return this._base.equal_to(obj._base);
+        }
+
+        public swap(obj: This): void {
+            this._base.swap(obj._base);
+        }
+
+    }
+}
+
+namespace std {
+    /* =========================================================
+     GLOBAL FUNCTIONS
+     - MOVERS
+     - BEGIN
+     - END
+     ============================================================
+     MOVERS
+     --------------------------------------------------------- */
+
+    /**
+     * Return distance between {@link Iterator iterators}.
+     *
+     * Calculate the number of elements between first and last
+     * 요소의 처음과 마지막 사이를 계산한다.
+     *
+     * If it is a {@link IArrayIterator random-access iterator}, the function uses operator- to calculate this.
+     * Otherwise, the function use the increate operator {@link Iterator.next next()} repeatedly
+     *
+     * @param first Iterator pointing to the initial element.
+     * @param last Iterator pointing toe the final element. This must be reachable form first
+     *
+     * @return The number of elements between first and last.
+     */
+    export function distance<T, InputIterator extends Iterator<T>> (first: InputIterator, last: InputIterator): number {
+
+        if( (<any>first).index != undefined )
+        {
+            // WHEN IARRAY_ITERATOR
+            // ABS FOR REVERSE_ITERATOR
+            return Math.abs((<any>last).index - (<any>first).index);
+        }
+
+        let length: number = 0;
+
+        for( ; !first.equal_to(last); first = first.next() as InputIterator ) {
+            length ++;
+        }
+
+        return length;
+    }
+
+    /**
+     * Advance iterator.
+     *
+     * Advance the iterator it by n elements positions.
+     *
+     * @param it Iterator to be advaced.
+     * @param n Number of element positions to advance.
+     *
+     * @return An iterator the the element n position before
+     */
+    export function advance<T, InputIterator extends Iterator<T>> (it: InputIterator, n: number) : InputIterator {
+        return it.advance(n) as InputIterator;
+    }
+
+    /**
+     * Get Iterator to previous element
+     *
+     * Returns an iterator pointing to the element that it would be pointing to if advanced -n position.
+     *
+     * @param it Iterator to base position.
+     * @param n Number of element position offet (1 by default)
+     *
+     * @return An iterator to the element n positions before it
+     */
+    export function prev<T, BidirectionalIterator extends Iterator<T>> (it: BidirectionalIterator, n: number = 1) {
+        return it.advance(n) as BidirectionalIterator;
+    }
+
+    /**
+     * Get Iterator to next element
+     *
+     * Returns an Iterator pointing to the element thant it would be pointing to if advanced n position
+     *
+     * @param it Iterator to base position.
+     * @param n Number of element positions offset (1 by default)
+     *
+     * @return An Iterator to the lement n positions away from it
+     */
+    export function next<T, ForwardIterator extends Iterator<T>> (it: ForwardIterator, n: number = 1) {
+        return it.advance(n) as ForwardIterator;
+    }
+
+    /* ---------------------------------------------------------
+     BEGIN
+     --------------------------------------------------------- */
+    /**
+     * Iterator to beginning
+     *
+     * Returns an iterator pointing to the first element in the sequence.
+     * 순서상의 요소중 첫번째를 반환한다.
+     *
+     * If the sequence is empty, the returned value shall not be dereferenced
+     *
+     * @param container A container object of a class type ofr which member
+     */
+
+
+
 
 
 }

@@ -1,4 +1,9 @@
 /// <reference path="API.ts" />
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 // Iterator definitions
 var std;
 (function (std) {
@@ -108,3 +113,175 @@ var std;
     }());
     std.Iterator = Iterator;
 })(std || (std = {}));
+var std;
+(function (std) {
+    /**
+     * this class reverse the direction in which a bidirectional or random-access iterator iterates through a range.
+     * 이 클래스는 범위를 통해 양방향 또는 랜덤 엑세스 반복자의 방향을 바꾼다.
+     *
+     * A copy of the original iterator(the {@link Iterator base iterator}) is kept internally and used to reflect the operations performed on the {@link ReverseIterator} :
+     * 오리지널 반복자의 복사본은 내부적으로 유지하고 operation을 수행할 때 쓰인다.
+     */
+    var ReverseIterator = (function (_super) {
+        __extends(ReverseIterator, _super);
+        /* ---------------------------------------------------------
+         CONSTRUCTORS
+         --------------------------------------------------------- */
+        /**
+         * Construct from base iterator.
+         *
+         * @param base A reference of the base iterator, which iterates in the opposite direction.
+         */
+        function ReverseIterator(base) {
+            if (base == null) {
+                _super.call(this, null);
+            }
+            else {
+                _super.call(this, base.get_source());
+                this._base = base.prev();
+            }
+        }
+        /**
+         * Return base iterator.
+         *
+         * The base iterator is an iterator of the same type as the on use to construct the ReverseIterator,
+         * but pointing to the element next to the one the {@link ReverseIterator} is currently pointing to
+         * (a {@link ReverseIterator} has always an offset of -1 with respect to its base iterator).
+         */
+        ReverseIterator.prototype.base = function () {
+            return this._base.next();
+        };
+        Object.defineProperty(ReverseIterator.prototype, "value", {
+            /* ---------------------------------------------------------
+             ACCESSORS
+             --------------------------------------------------------- */
+            /**
+             * <p> Get value of the iterator is pointing. </p>
+             *
+             * @return A value of the reverse iterator.
+             */
+            get: function () {
+                return this._base.value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        /* ---------------------------------------------------------
+         MOVERS
+         --------------------------------------------------------- */
+        /**
+         * @inheritdoc
+         */
+        ReverseIterator.prototype.prev = function () {
+            var ret = this.create_neighbor();
+            ret._base = this._base.next();
+            return ret;
+        };
+        ReverseIterator.prototype.next = function () {
+            var ret = this.create_neighbor();
+            ret._source = this._source;
+            ret._base = this._base.next();
+            return ret;
+        };
+        ReverseIterator.prototype.advance = function (n) {
+            var ret = this.create_neighbor();
+            ret._source = this._source;
+            ret._base = this._base.advance(-n);
+            return ret;
+        };
+        /* ---------------------------------------------------------
+         COMPARES
+         --------------------------------------------------------- */
+        ReverseIterator.prototype.equal_to = function (obj) {
+            return this._base.equal_to(obj._base);
+        };
+        ReverseIterator.prototype.swap = function (obj) {
+            this._base.swap(obj._base);
+        };
+        return ReverseIterator;
+    }(std.Iterator));
+    std.ReverseIterator = ReverseIterator;
+})(std || (std = {}));
+var std;
+(function (std) {
+    /* =========================================================
+     GLOBAL FUNCTIONS
+     - MOVERS
+     - BEGIN
+     - END
+     ============================================================
+     MOVERS
+     --------------------------------------------------------- */
+    /**
+     * Return distance between {@link Iterator iterators}.
+     *
+     * Calculate the number of elements between first and last
+     * 요소의 처음과 마지막 사이를 계산한다.
+     *
+     * If it is a {@link IArrayIterator random-access iterator}, the function uses operator- to calculate this.
+     * Otherwise, the function use the increate operator {@link Iterator.next next()} repeatedly
+     *
+     * @param first Iterator pointing to the initial element.
+     * @param last Iterator pointing toe the final element. This must be reachable form first
+     *
+     * @return The number of elements between first and last.
+     */
+    function distance(first, last) {
+        if (first.index != undefined) {
+            // WHEN IARRAY_ITERATOR
+            // ABS FOR REVERSE_ITERATOR
+            return Math.abs(last.index - first.index);
+        }
+        var length = 0;
+        for (; !first.equal_to(last); first = first.next()) {
+            length++;
+        }
+        return length;
+    }
+    std.distance = distance;
+    /**
+     * Advance iterator.
+     *
+     * Advance the iterator it by n elements positions.
+     *
+     * @param it Iterator to be advaced.
+     * @param n Number of element positions to advance.
+     *
+     * @return An iterator the the element n position before
+     */
+    function advance(it, n) {
+        return it.advance(n);
+    }
+    std.advance = advance;
+    /**
+     * Get Iterator to previous element
+     *
+     * Returns an iterator pointing to the element that it would be pointing to if advanced -n position.
+     *
+     * @param it Iterator to base position.
+     * @param n Number of element position offet (1 by default)
+     *
+     * @return An iterator to the element n positions before it
+     */
+    function prev(it, n) {
+        if (n === void 0) { n = 1; }
+        return it.advance(n);
+    }
+    std.prev = prev;
+    /**
+     * Get Iterator to next element
+     *
+     * Returns an Iterator pointing to the element thant it would be pointing to if advanced n position
+     *
+     * @param it Iterator to base position.
+     * @param n Number of element positions offset (1 by default)
+     *
+     * @return An Iterator to the lement n positions away from it
+     */
+    function next(it, n) {
+        if (n === void 0) { n = 1; }
+        return it.advance(n);
+    }
+    std.next = next;
+})(std || (std = {}));
+//# sourceMappingURL=Iterator.js.map
