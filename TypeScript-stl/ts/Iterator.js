@@ -177,12 +177,18 @@ var std;
             ret._base = this._base.next();
             return ret;
         };
+        /**
+         * @inheritdoc
+         */
         ReverseIterator.prototype.next = function () {
             var ret = this.create_neighbor();
             ret._source = this._source;
             ret._base = this._base.next();
             return ret;
         };
+        /**
+         * @inheritdoc
+         */
         ReverseIterator.prototype.advance = function (n) {
             var ret = this.create_neighbor();
             ret._source = this._source;
@@ -192,9 +198,15 @@ var std;
         /* ---------------------------------------------------------
          COMPARES
          --------------------------------------------------------- */
+        /**
+         * @inheritdoc
+         */
         ReverseIterator.prototype.equal_to = function (obj) {
             return this._base.equal_to(obj._base);
         };
+        /**
+         * @inheritdoc
+         */
         ReverseIterator.prototype.swap = function (obj) {
             this._base.swap(obj._base);
         };

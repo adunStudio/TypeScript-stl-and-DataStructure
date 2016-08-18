@@ -244,6 +244,9 @@ namespace std {
             return ret;
         }
 
+        /**
+         * @inheritdoc
+         */
         public next(): This {
             let ret = this.create_neighbor();
             ret._source = this._source;
@@ -252,6 +255,9 @@ namespace std {
             return ret;
         }
 
+        /**
+         * @inheritdoc
+         */
         public advance(n: number): This {
             let ret = this.create_neighbor();
             ret._source = this._source;
@@ -263,10 +269,16 @@ namespace std {
         /* ---------------------------------------------------------
          COMPARES
          --------------------------------------------------------- */
+        /**
+         * @inheritdoc
+         */
         public equal_to(obj: This): boolean {
             return this._base.equal_to(obj._base);
         }
 
+        /**
+         * @inheritdoc
+         */
         public swap(obj: This): void {
             this._base.swap(obj._base);
         }
