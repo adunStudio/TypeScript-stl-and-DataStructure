@@ -5,9 +5,6 @@ var std;
     (function (base) {
         /**
          * An abstract container
-         * 추상 컨테이너
-         *
-         * @param <T> TYpe of elements
          */
         var Container = (function () {
             function Container() {
@@ -18,6 +15,12 @@ var std;
                 // THIS IS ABSTRACT CLASS
                 // NOTHING TO DO ESPECIALLY
             }
+            /**
+             * @inheritdoc
+             */
+            Container.prototype.clear = function () {
+                this.erase(this.begin(), this.end());
+            };
             /**
              * @inheritdoc
              */

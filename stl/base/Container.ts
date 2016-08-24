@@ -1,16 +1,13 @@
 /// <reference path="../API.ts" />
 
-namespace std.base {
-
+namespace std.base
+{
     /**
      * An abstract container
-     * 추상 컨테이너
-     *
-     * @param <T> TYpe of elements
      */
 
-    export abstract class Container<T> implements IContainer<T> {
-
+    export abstract class Container<T> implements IContainer<T>
+    {
         /* =========================================================
          CONSTRUCTORS & SEMI-CONSTRUCTORS
          - CONSTRUCTORS
@@ -19,41 +16,41 @@ namespace std.base {
          CONSTURCTORS
          --------------------------------------------------------- */
         /**
-         * Default Constructor.
-         *
-         * Constructs an empty container, with no elements
+         * Default Constructor
          */
         public constructor();
 
         /**
-         * Initializer list Constructor.
-         *
+         * Initialize list Constructor
          * Constructs a container with a copy of each of the elements in array, in the same order
          *
-         * @param array An Array containing elements to be copied and contained.
+         * @para array An array containing elements to be copied and contained
          */
         public constructor(array: Array<T>);
 
         /**
-         * Copy Constructor.
+         * Copy constructor
+         * Constructs a container with a copy of each of the elements in container, in the saome order
          *
-         * Constructs a container with a copy of each of the elements in container, in the same order
-         *
-         * @param container Another container object of the same type
+         * @param container Another container object of same type
          */
         public constructor(container: IContainer<T>);
 
         /**
-         * Range Constructor.
+         * Range constructor
+         * Constructs a container with as many elements as the range begin ~ end
          *
-         * Constructs a container with as many lements as the range begin, and,with each element
+         * @param begin Input iterator of the initial position in a sequence
+         * @param end   Input iterator of the final position in a sequence
          */
         public constructor(begin: Iterator<T>, end: Iterator<T>);
 
-        public constructor(...args: any[]) {
+        public constructor(...args: any[])
+        {
             // THIS IS ABSTRACT CLASS
             // NOTHING TO DO ESPECIALLY
         }
+
 
         /* ---------------------------------------------------------
          ASSIGN & CLEAR
@@ -67,7 +64,11 @@ namespace std.base {
         /**
          * @inheritdoc
          */
-        public abstract clear(): void;
+        public clear(): void
+        {
+            this.erase(this.begin(), this.end());
+        }
+
 
         /* ---------------------------------------------------------------
          GETTERS
@@ -123,6 +124,7 @@ namespace std.base {
          */
         public abstract insert(position: Iterator<T>, val: T): Iterator<T>;
 
+
         /* ---------------------------------------------------------
          ERASE
          --------------------------------------------------------- */
@@ -137,20 +139,12 @@ namespace std.base {
         public abstract erase<U extends T>(begin: Iterator<U>, end: Iterator<U>): Iterator<T>;
 
 
-
         /* ---------------------------------------------------------------
          UTILITIES
          --------------------------------------------------------------- */
         /**
          * @inheritdoc
          */
-       /* public swap(obj: IContainer<T>): void {
-            let supplement: Vector<T> = new Vector<T>(this.begin(), this.end());
-
-            this.assign(obj.begin(), obj.end());
-            obj.assign(supplement.begin(), supplement.end());
-        }*/
-
-        public abstract swap(obj: IContainer<T>): void
+        public abstract swap(obj: IContainer<T>): void;
     }
 }

@@ -1,12 +1,13 @@
 /// <reference path="../API.ts" />
 
-namespace std.base {
-
+namespace std.base
+{
     /**
      * An interface for linear containers
-     * 선형 컨테이너를 위한 인터페이스다.
      */
-    export interface ILinearContainer<T> extends IContainer<T> {
+
+    export interface ILinearContainer<T> extends IContainer<T>
+    {
         /* ---------------------------------------------------------
          CONSTRUCTORS
          --------------------------------------------------------- */
@@ -16,17 +17,15 @@ namespace std.base {
         assign<U extends T, InputIterator extends Iterator<U>>
             (begin: InputIterator, end: InputIterator): void;
 
-
         /**
-         * Assign container content.
+         * Assign container content
+         * Assign new contents to the IList container, replacing its current contents, and modifying its size accordingly
          *
-         * Assign container contents to the IList container, replacing its current contents,
-         * and modifying its size accordingly.
-         *
-         * @param n new size for the
-         * @param val Value to fill the container width. Each of the n elements in the container will be initialize to a copy of this value
+         * @param n New size of the
+         * @param val Value to fill the container with. Each of the n elements in the container will be initialize to a copy of the value
          */
         assign(n: number, val: T): void;
+
 
         /* ---------------------------------------------------------
          ACCESSORS
@@ -34,19 +33,12 @@ namespace std.base {
         /**
          * Access first element
          * Returns a value of the first element in the IList container
-         *
-         * unlike member end(), which return an interator just past this element,
-         * this function returns a direct value.
-         *
-         * Calling this function on an empty cause undefined behavior.
-         *
-         * @return A value of the first element of the IList container
          */
         front(): T;
 
         /**
          * Access last element
-         * ..
+         * Returns a value of the last element in the IList container
          */
         back(): T;
 
@@ -56,35 +48,45 @@ namespace std.base {
          --------------------------------------------------------- */
         /**
          * Add element at the end
-         *
-         * adds new element at the end of the IList container, after its current last element
-         * This effectively increase the IList container size by one
-         *
-         * @param val Value to be copied to the new element
          */
         push_back(val: T): void;
 
         /**
-         * Delete last lement
+         * Delete last element
          */
         pop_back(): void;
 
+
         /**
          * Insert an element
+         * The IList container is extended by inserting new element before the element at the specified position,
+         * effectively increasing the IList container size by one
          *
+         * @param position
+         * @param val
          */
         insert(position: Iterator<T>, val: T): Iterator<T>;
 
         /**
-         * insert elements by range iterators
+         * Insert elements by range iterators
+         * The IList container is extended by inserting new elements before the element at the specified position,
+         * effectively increasing the IList container size by the number of repeating elements
+         *
+         * @param position
+         * @param n
+         * @param val
          */
-        insert(position: IContainer<T>, n: number, val: T): Iterator<T>;
+        insert(position: Iterator<T>, n: number, val: T): Iterator<T>;
 
+        /**
+         * Insert elements by range iterators
+         *
+         * @param position
+         * @param begin
+         * @param end
+         */
         insert<U extends T, InputIterator extends Iterator<U>>
-            (position: Iterator<T>, begin: InputIterator, end: InputIterator): Iterator<T>;
-
-
-
+            (position: Iterator<T>, begin: InputIterator, end: InputIterator): Iterator<T>
 
     }
 }
