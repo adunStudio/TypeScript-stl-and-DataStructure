@@ -16,6 +16,10 @@ var std;
         function Iterator(source) {
             this._source = source;
         }
+        /**
+         * 반복자를 순회한다.
+         *
+         */
         Iterator.prototype.advance = function (n) {
             var it = this;
             var i;
@@ -55,7 +59,9 @@ var std;
          * Whether an iterator is equal with the iterator.
          * Compare two iterators and returns whether they are equal or not
          *
-         * Iterator's equal_to() only compare souce container and index number.
+         * Iterator's equal_to() only compare source container and index number.
+         *
+         * C++ 에서의 == 연산자
          *
          * @param obj
          * @returns {boolean}
@@ -169,5 +175,33 @@ var std;
         return ReverseIterator;
     }(std.Iterator));
     std.ReverseIterator = ReverseIterator;
+})(std || (std = {}));
+var std;
+(function (std) {
+    /* =========================================================
+     GLOBAL FUNCTIONS
+     - MOVERS
+     - BEGIN
+     - END
+     ============================================================
+     MOVERS
+     --------------------------------------------------------- */
+    function distance(first, last) {
+        if (first.index != undefined) {
+            // WHEN IARRAY_ITERATOR
+            // ABS FOR REVERSE_ITERATOR
+            return Math.abs(last.index - first.index);
+        }
+        var length = 0;
+        for (; !first.equal_to(last); first = first.next()) {
+            length++;
+        }
+        return length;
+    }
+    std.distance = distance;
+    function advance(it, n) {
+        return it.advance(n);
+    }
+    std.advance = advance;
 })(std || (std = {}));
 //# sourceMappingURL=Iterator.js.map

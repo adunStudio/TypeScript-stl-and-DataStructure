@@ -11,12 +11,16 @@ namespace std.base
         /**
          * Insert element at beginning
          *
+         * 첫 번째 위치에 데이터를 추가한다.
+         *
          * @param val
          */
         push_front(val: T): void;
 
         /**
          * Delete first element
+         *
+         * 첫 번째 위치의 데이터를 삭제한다.
          */
         pop_front(): void;
     }

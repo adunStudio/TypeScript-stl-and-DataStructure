@@ -7,12 +7,18 @@ namespace std
     {
         /**
          * Bi-directional iterator
+         * 양방향 반복자
          *
-         * Iterator(Bi-directional iterator) are iterators that can be used to access the sequence of elements in a
-         * range in both directions (towards the end and towards the beginning)
+         * 반복자의 범주
+         * 입력 반복자(Input-iterator): 현 위치의 원소를 한 번만 읽을 수 있는 반복자
+         * 출력 반복자(Output-iterator): 현 위치의 원소를 한 번만 쓸수 있는 반복자
+         * 순방향 반복자(Forward iterator): 입력, 출력 반복자 기능에 순방향으로 이동(++)이 가능한 재 할당될 수 있는 반복자
+         * 양방향 반복자(Bi-directional iterator): 순방향 반복자 기능에 역방향으로 이동(--)이 가능한 반복자 (List, Set, Multiset, Map, multimap.....)
+         * 임의 접근 박복자(Random access iterator): 양방향 반복자 기능에 +, -, +=, -=, [] 연산이 가능한 반복자(vector, deque)
          *
-         * There is not a single type of Iterator
-         * Each container may define its own specific iterator type able to iterate through it and access its elements.
+         * 모든 컨테이너는 양방향 반복자 이상을 제공한다.
+         * 배열 기반 컨테이너인 vector와 deque는 임의 접근 반복자를 제공한다.
+         *
          */
 
         /**
@@ -40,14 +46,24 @@ namespace std
 
         /**
          * Get iterator to previous element
+         *
+         * C++ 에서의 -- 연산자
+         * 반복자의 이전 원소를 가리키도록 이동한다.
          */
         public abstract prev(): Iterator<T>;
 
         /**
          * Get iterator to next element
+         *
+         * C++ 에서의 ++ 연산자
+         * 반복자의 다음 원소를 가리키도록 이동한다.
          */
         public abstract next(): Iterator<T>;
 
+        /**
+         * 반복자를 순회한다.
+         *
+         */
         public advance(n: number): Iterator<T>
         {
             let it: Iterator<T> = this;
@@ -104,7 +120,9 @@ namespace std
          * Whether an iterator is equal with the iterator.
          * Compare two iterators and returns whether they are equal or not
          *
-         * Iterator's equal_to() only compare souce container and index number.
+         * Iterator's equal_to() only compare source container and index number.
+         *
+         * C++ 에서의 == 연산자
          *
          * @param obj
          * @returns {boolean}
@@ -119,6 +137,9 @@ namespace std
             throw new Error('Have to be overriden.');
         }
 
+        /**
+         * 반복자를 교환한다.
+         */
         public abstract swap(obj: Iterator<T>): void;
     }
 }
@@ -244,4 +265,44 @@ namespace std
             this._base.swap(obj._base);
         }
     }
+}
+
+namespace std
+{
+    /* =========================================================
+     GLOBAL FUNCTIONS
+     - MOVERS
+     - BEGIN
+     - END
+     ============================================================
+     MOVERS
+     --------------------------------------------------------- */
+
+    export function distance<T, InputIterator extends Iterator<T>>
+        (first: InputIterator, last: InputIterator): number
+    {
+        if( (<any>first).index != undefined )
+        {
+            // WHEN IARRAY_ITERATOR
+            // ABS FOR REVERSE_ITERATOR
+            return Math.abs((<any>last).index - (<any>first).index);
+        }
+
+         let length: number = 0;
+
+        for( ; !first.equal_to(last); first = first.next() as InputIterator )
+        {
+            length ++;
+        }
+
+        return length;
+    }
+
+    export function advance<T, InputIterator extends Iterator<T>>
+        (it: InputIterator, n: number): InputIterator
+    {
+        return it.advance(n) as InputIterator;
+    }
+
+
 }
