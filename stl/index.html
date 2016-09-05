@@ -9,6 +9,23 @@
 </body>
 <script src="./test/test_list.js"></script>
 <script>
+    var stack = new std.Stack();
+    stack.push('백왕은');
+    stack.push('대가리가');
+    stack.push('말미잘');
+    stack.push('바보');
+    stack.push('멍청이');
+
+    console.log(stack.size());         // 5
+
+    for( ; !stack.empty(); stack.pop())
+    {
+        console.log(stack.top());
+    }
+
+
+</script>
+<!--<script>
 
 
     /*
@@ -71,7 +88,7 @@
     it = it.next();
     console.log(it.value);      // print 2
 
-    // C++ -- === prev()
+    // C++ &#45;&#45; === prev()
     it = it.prev();
     console.log(it.value);      // print 1
 
@@ -119,5 +136,5 @@
     // CLEAR
     list.clear();
 
-</script>
+</script>-->
 </html>

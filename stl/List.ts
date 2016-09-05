@@ -9,7 +9,7 @@ namespace std.List
 namespace std
 {
     /**
-     * 더블 링크드 리스트
+     * 더블리 링크드 리스트
      *
      * List are sequence containers that allow constant time insert and erase operation anywhere within the
      * sequence, and iteration in both diretions
@@ -410,6 +410,8 @@ namespace std
 
             prev.set_next(position);
             position.set_prev(prev);
+
+            this._size += size;
 
             return first;
         }

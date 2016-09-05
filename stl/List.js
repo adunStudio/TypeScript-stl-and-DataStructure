@@ -7,7 +7,7 @@ var __extends = (this && this.__extends) || function (d, b) {
 var std;
 (function (std) {
     /**
-     * 더블 링크드 리스트
+     * 더블리 링크드 리스트
      *
      * List are sequence containers that allow constant time insert and erase operation anywhere within the
      * sequence, and iteration in both diretions
@@ -248,6 +248,7 @@ var std;
             }
             prev.set_next(position);
             position.set_prev(prev);
+            this._size += size;
             return first;
         };
         List.prototype.insert_by_range = function (position, begin, end) {

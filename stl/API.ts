@@ -3,6 +3,8 @@
  */
 
 /// <reference path="Iterator.ts" />
+/// <reference path="List.ts" />
+
 /// <reference path="./base/IContainer.ts" />
 /// <reference path="./base/Container.ts" />
 /// <reference path="./base/ILinearContainer.ts" />
