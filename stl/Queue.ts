@@ -1,12 +1,10 @@
 /// <reference path="API.ts" />
 
-
-
 namespace std
 {
-    export class Stack<T> {
-
-        private _container: base.ILinearContainer<T>;
+    export class Queue<T>
+    {
+        private _container: base.IDequeContainer<T>;
 
 
         /* =========================================================
@@ -22,28 +20,39 @@ namespace std
         /**
          * 컨테이너 복사 생성자
          */
-        public constructor(stack: Stack<T>);
+        public constructor(container: Queue<T>);
 
-        public constructor(stack: Stack<T> = null) {
+        public constructor(queue: Queue<T> = null)
+        {
             this._container = new List<T>();
 
-            if (stack != null) {
-                this._container.assign(stack._container.begin(), stack._container.end());
+            if( queue != null )
+            {
+                this._container.assign(queue._container.begin(), queue._container.end());
             }
         }
+
 
         /* =========================================================
          ACCESSORS
          ========================================================= */
-        public size(): number {
+        public size(): number
+        {
             return this._container.size();
         }
 
-        public empty(): boolean {
+        public empty(): boolean
+        {
             return this._container.empty();
         }
 
-        public top(): T {
+        public front(): T
+        {
+            return this._container.front();
+        }
+
+        public back(): T
+        {
             return this._container.back();
         }
 
@@ -53,17 +62,25 @@ namespace std
          ============================================================
          PUSH & POP & SWAP
          --------------------------------------------------------- */
-        public push(val: T): void {
+        public push(val: T): void
+        {
             this._container.push_back(val);
         }
 
         public pop(): void {
-            this._container.pop_back();
+            this._container.pop_front();
         }
 
-        public swap(obj: Stack<T>): void
+        public swap(obj: Queue<T>): void
         {
             this._container.swap(obj._container);
         }
+
     }
+}
+
+
+namespace std
+{
+
 }

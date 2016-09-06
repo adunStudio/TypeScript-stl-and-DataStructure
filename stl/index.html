@@ -9,6 +9,19 @@
 </body>
 <script src="./test/test_list.js"></script>
 <script>
+    var queue = new std.Queue();
+    queue.push('큐는');
+    queue.push('선입선출');
+    queue.push('자료구조');
+
+    console.log(queue.size());              // 3
+
+    for( ; !queue.empty(); queue.pop())
+    {
+        console.log(queue.front());         // 큐는 선입선출 자료구조
+    }
+</script>
+<!--<script>
     var stack = new std.Stack();
     stack.push('백왕은');
     stack.push('대가리가');
@@ -24,7 +37,7 @@
     }
 
 
-</script>
+</script>-->
 <!--<script>
 
 
